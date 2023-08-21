@@ -1,22 +1,38 @@
-import {StyleSheet, Text, useColorScheme, View} from 'react-native';
+import {useColorScheme, View} from 'react-native';
 
 import React from 'react';
 
-import {
-  Colors,
-  DebugInstructions,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Section} from './Section';
 
-const styles = StyleSheet.create({
-  highlight: {
-    fontWeight: '700',
-  },
-});
+import i18n from 'i18next';
+import {initReactI18next, useTranslation} from 'react-i18next';
+
+i18n
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .init({
+    compatibilityJSON: 'v3',
+    // the translations
+    // (tip move them in a JSON file and import them,
+    // or even better, manage them via a UI: https://react.i18next.com/guides/multiple-translation-files#manage-your-translations-with-a-management-gui)
+    resources: {
+      en: {
+        translation: {
+          'Welcome to React': 'Welcome to React and react-i18next',
+        },
+      },
+    },
+    lng: 'en', // if you're using a language detector, do not define the lng option
+    fallbackLng: 'en',
+
+    interpolation: {
+      escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+    },
+  });
 
 export const Home = (): JSX.Element => {
+  const {t} = useTranslation();
+
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
@@ -24,20 +40,7 @@ export const Home = (): JSX.Element => {
       style={{
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
       }}>
-      <Section title="Step One">
-        Edit <Text style={styles.highlight}>App.tsx</Text> to change this screen
-        and then come back to see your edits.
-      </Section>
-      <Section title="See Your Changes">
-        <ReloadInstructions />
-      </Section>
-      <Section title="Debug">
-        <DebugInstructions />
-      </Section>
-      <Section title="Learn More">
-        Read the docs to discover what to do next:
-      </Section>
-      <LearnMoreLinks />
+      <Section title="Step One">{t('Welcome to React')}</Section>
     </View>
   );
 };
